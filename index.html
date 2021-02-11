@@ -64,37 +64,38 @@
               <h5 class="modal-title" id="staticBackdropLabel">Nueva Mascota</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form>
+            <form id="form">
+              <input type="hidden" name="id" id="inputId">
               <div class="modal-body">
                 <div class="row g-3 mb-3">
                   <div class="col">
-                    <select class="form-select" aria-label="Default select example">
+                    <select class="form-select" aria-label="Default select example" id="tipo">
                       <option selected>Tipo de animal</option>
-                      <option value="1">Perro</option>
-                      <option value="2">Gato</option>
-                      <option value="3">Pez</option>
-                      <option value="4">Otro</option>
+                      <option>Perro</option>
+                      <option>Gato</option>
+                      <option>Pez</option>
+                      <option>Otro</option>
                     </select>
                   </div>
                 </div>
                 <div class="row g-3">
                   <div class="col">
-                    <input type="text" name="nombre" class="form-control" placeholder="Nombre">
+                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre">
                   </div>
                   <div class="col">
-                    <select class="form-select" aria-label="Default select example">
+                    <select id="dueno" class="form-select" aria-label="Default select example">
                       <option selected>Dueño</option>
-                      <option value="1">Juan</option>
-                      <option value="2">Jose</option>
-                      <option value="3">Camilo</option>
-                      <option value="4">Sandra</option>
+                      <option>Juan</option>
+                      <option>Jose</option>
+                      <option>Camilo</option>
+                      <option>Sandra</option>
                     </select>
                   </div>
                 </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-primary">Crear</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnSave">Crear</button>
               </div>
             </form>
           </div>
@@ -102,6 +103,7 @@
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/9e33d3bfc7.js" crossorigin="anonymous"></script>
     <script src="/js/mascotas.js"></script>
   </body>
