@@ -6,8 +6,6 @@ module.exports = {
     { type: "perro", name: "coraje", owner: "oscar", updated_at: new Date(), created_at: new Date() },
     { type: "perro", name: "coraje", owner: "oscar", updated_at: new Date(), created_at: new Date() },
     { type: "perro", name: "coraje", owner: "oscar", updated_at: new Date(), created_at: new Date() },
-    { type: "perro", name: "coraje", owner: "oscar", updated_at: new Date(), created_at: new Date() },
-    { type: "perro", name: "coraje", owner: "oscar", updated_at: new Date(), created_at: new Date() },
     { type: "perro", name: "coraje", owner: "manhuel", updated_at: new Date(), created_at: new Date() },
   ],
   veterinarians: [
