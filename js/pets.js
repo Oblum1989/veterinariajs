@@ -89,7 +89,7 @@ function resetData() {
 
 function deletePet(key) {
   return function clickDelete() {
-    pets = pets.filter((mascota, keyMascota) => keyMascota !== key)
+    pets = pets.filter((mascota, keyMascota) => keyMascota !== key);
     showPets();
   };
 }
