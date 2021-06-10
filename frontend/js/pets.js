@@ -5,67 +5,78 @@ const owner = document.getElementById("dueno");
 const inputId = document.getElementById("inputId");
 const form = document.getElementById("form");
 const btnSave = document.getElementById("btnSave");
-let pets = [
-  {
-    type: "Gato",
-    name: "Manchas",
-    owner: "Juan",
-  },
-  {
-    type: "Perro",
-    name: "firulais",
-    owner: "Jose",
-  },
-  {
-    type: "Perro",
-    name: "Furia",
-    owner: "Sandra",
-  },
-];
+const URL = "http://localhost:5000/pets"
 
-function showPets() {
-  const htmlPets = pets
-    .map(
-      (pet, key) => `
-    <tr>
-      <th scope="row">${key}</th>
-      <td>${pet.type}</td>
-      <td>${pet.name}</td>
-      <td>${pet.owner}</td>
-      <td>
-        <button type="button" class="btn btn-success edit" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="far fa-edit"></i></button>
-        <button type="button" class="btn btn-danger delete"><i class="far fa-trash-alt"></i></button>
-      </td>
-    </tr>`
-    )
-    .join("");
-  listPets.innerHTML = htmlPets;
-  Array.from(document.getElementsByClassName("edit")).forEach(
-    (btnEdit, key) => (btnEdit.onclick = edit(key))
-  );
-  Array.from(document.getElementsByClassName("delete")).forEach(
-    (btnDelete, key) => (btnDelete.onclick = deletePet(key))
-  );
+let pets = [];
+
+async function showPets() {
+  try {
+    const response = await fetch(URL)
+    const petsServer = await response.json()
+    if(Array.isArray(petsServer) && petsServer.length > 0){
+      pets = petsServer
+    }
+    const htmlPets = pets
+      .map(
+        (pet, key) => `
+      <tr>
+        <th scope="row">${key}</th>
+        <td>${pet.type}</td>
+        <td>${pet.name}</td>
+        <td>${pet.owner}</td>
+        <td>
+          <button type="button" class="btn btn-success edit" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="far fa-edit"></i></button>
+          <button type="button" class="btn btn-danger delete"><i class="far fa-trash-alt"></i></button>
+        </td>
+      </tr>`
+      )
+      .join("");
+    listPets.innerHTML = htmlPets;
+    Array.from(document.getElementsByClassName("edit")).forEach(
+      (btnEdit, key) => (btnEdit.onclick = edit(key))
+    );
+    Array.from(document.getElementsByClassName("delete")).forEach(
+      (btnDelete, key) => (btnDelete.onclick = deletePet(key))
+    );
+  } catch (error) {
+    throw error
+  }
 }
 
-function sendData(e) {
+async function sendData(e) {
   e.preventDefault();
-  const data = {
-    type: type.value,
-    name: name.value,
-    owner: owner.value,
-  };
-  const action = btnSave.innerHTML;
-  switch (action) {
-    case "Editar":
+  try {
+    const data = {
+      type: type.value,
+      name: name.value,
+      owner: owner.value,
+    };
+    let method = "POST"
+    let urlSend = URL
+    const action = btnSave.innerHTML;
+    console.log(action)
+    if(action === "Editar"){
+      method = "PUT"
+      console.log(method)
       pets[inputId.value] = data;
-      break;
-    default:
-      pets.push(data);
-      break;
+      urlSend = `${URL}/${inputId.value}`
+    }
+    console.log(method)
+    const response = await fetch(urlSend, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+    if (response.ok) {
+      showPets();
+      resetData();
+    }
+  } catch (error) {
+    throw error
   }
-  showPets();
-  resetData();
+
 }
 
 function edit(key) {
@@ -94,5 +105,6 @@ function deletePet(key) {
   };
 }
 showPets();
+
 form.onsubmit = sendData;
 btnSave.onclick = sendData;
