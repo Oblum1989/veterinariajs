@@ -41,8 +41,14 @@
     </nav>
     <div class="container mt-5">
       <h1 class="m-2 text-center">Mascotas</h1>
-      <table class="table caption-top">
+      <div class="">
+        <div id="alert" class="alert alert-danger alert-dismissible fade hide" role="alert">
+          <strong>Ups!</strong> Ha ocurrido un error
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         <button type="button" class="btn btn-primary m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fas fa-plus"></i> Nueva mascota</button>
+      </div>
+      <table class="table caption-top">
         <thead class="table-dark">
           <tr>
             <th scope="col">#</th>

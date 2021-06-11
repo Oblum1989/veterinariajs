@@ -5,6 +5,7 @@ const owner = document.getElementById("dueno");
 const inputId = document.getElementById("inputId");
 const form = document.getElementById("form");
 const btnSave = document.getElementById("btnSave");
+const alertNode = document.getElementById('alert')
 const URL = "http://localhost:5000/pets"
 
 let pets = [];
@@ -13,33 +14,40 @@ async function showPets() {
   try {
     const response = await fetch(URL)
     const petsServer = await response.json()
-    if(Array.isArray(petsServer) && petsServer.length > 0){
+    if(Array.isArray(petsServer)){
       pets = petsServer
     }
-    const htmlPets = pets
-      .map(
-        (pet, key) => `
-      <tr>
-        <th scope="row">${key}</th>
-        <td>${pet.type}</td>
-        <td>${pet.name}</td>
-        <td>${pet.owner}</td>
-        <td>
-          <button type="button" class="btn btn-success edit" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="far fa-edit"></i></button>
-          <button type="button" class="btn btn-danger delete"><i class="far fa-trash-alt"></i></button>
-        </td>
+    if (pets.length > 0) {
+      const htmlPets = pets
+        .map(
+          (pet, key) => `
+        <tr>
+          <th scope="row">${key}</th>
+          <td>${pet.type}</td>
+          <td>${pet.name}</td>
+          <td>${pet.owner}</td>
+          <td>
+            <button type="button" class="btn btn-success edit" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="far fa-edit"></i></button>
+            <button type="button" class="btn btn-danger delete"><i class="far fa-trash-alt"></i></button>
+          </td>
+        </tr>`
+        )
+        .join("");
+      listPets.innerHTML = htmlPets;
+      Array.from(document.getElementsByClassName("edit")).forEach(
+        (btnEdit, key) => (btnEdit.onclick = edit(key))
+      );
+      Array.from(document.getElementsByClassName("delete")).forEach(
+        (btnDelete, key) => (btnDelete.onclick = deletePet(key))
+      );
+    }else{
+      listPets.innerHTML = `<tr>
+        <td colspan="5">No tienes mascotas </td>
       </tr>`
-      )
-      .join("");
-    listPets.innerHTML = htmlPets;
-    Array.from(document.getElementsByClassName("edit")).forEach(
-      (btnEdit, key) => (btnEdit.onclick = edit(key))
-    );
-    Array.from(document.getElementsByClassName("delete")).forEach(
-      (btnDelete, key) => (btnDelete.onclick = deletePet(key))
-    );
+    }
   } catch (error) {
-    throw error
+    alertNode.classList.toggle("hide");
+    alertNode.classList.toggle("show");
   }
 }
 
@@ -54,14 +62,11 @@ async function sendData(e) {
     let method = "POST"
     let urlSend = URL
     const action = btnSave.innerHTML;
-    console.log(action)
     if(action === "Editar"){
       method = "PUT"
-      console.log(method)
       pets[inputId.value] = data;
       urlSend = `${URL}/${inputId.value}`
     }
-    console.log(method)
     const response = await fetch(urlSend, {
       method,
       headers: {
@@ -74,7 +79,8 @@ async function sendData(e) {
       resetData();
     }
   } catch (error) {
-    throw error
+    alertNode.classList.toggle("hide");
+    alertNode.classList.toggle("show");
   }
 
 }
@@ -99,9 +105,20 @@ function resetData() {
 }
 
 function deletePet(key) {
-  return function clickDelete() {
-    pets = pets.filter((mascota, keyMascota) => keyMascota !== key);
-    showPets();
+  const urlSend = `${URL}/${key}`
+  return async function clickDelete() {
+    try {
+      const response = await fetch(urlSend, {
+        method: "DELETE",
+      })
+      if (response.ok) {
+        showPets();
+        resetData();
+      }
+    } catch (error) {
+      alertNode.classList.toggle("hide");
+      alertNode.classList.toggle("show");
+    }
   };
 }
 showPets();
