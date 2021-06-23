@@ -11,7 +11,7 @@ module.exports = {
   pets: pets(resources.pets),
   owners: owners(resources.owners),
   veterinarians: veterinarians(resources.veterinarians),
-  consults: consults(resources.consults),
+  consults: consults(resources),
   noFound: (data, callback) => {
     callback(404, { message: "no encontrado" });
   },

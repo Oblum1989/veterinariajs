@@ -1,4 +1,4 @@
-module.exports = function consultsHandler(consults) {
+module.exports = function consultsHandler({consults, veterinarians, pets}) {
   return {
     get: (data, callback) => {
       if (typeof data.indice !== "undefined") {
@@ -9,7 +9,10 @@ module.exports = function consultsHandler(consults) {
           message: `elemento con indice ${data.indice} no encontrado`,
         });
       }
-      callback(200, consults);
+      const consultsRelations = consults.map((consult)=>(
+        {...consult, pet: pets[consult.mascota], veterinarian: veterinarians[consult.veterinarian]}
+      ))
+      callback(200, consultsRelations);
     },
     post: (data, callback) => {
       let newConsult = data.payload;

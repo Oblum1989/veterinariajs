@@ -53,9 +53,10 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">Mascota</th>
-            <th scope="col">Veterinario</th>
-            <th scope="col">Historial</th>
+            <th scope="col">Veterinari@</th>
             <th scope="col">Diagnóstico</th>
+            <th scope="col">Fecha de creación</th>
+            <th scope="col">Fecha de actualización</th>
             <th scope="col"></th>
           </tr>
         </thead>
@@ -68,7 +69,7 @@
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="staticBackdropLabel">Nueva Mascota</h5>
+              <h5 class="modal-title" id="staticBackdropLabel">Nueva Consulta</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="form">
@@ -76,27 +77,19 @@
               <div class="modal-body">
                 <div class="row g-3 mb-3">
                   <div class="col">
-                    <select class="form-select" aria-label="Default select example" id="tipo">
-                      <option selected>Tipo de animal</option>
-                      <option>Perro</option>
-                      <option>Gato</option>
-                      <option>Pez</option>
-                      <option>Otro</option>
+                    <select class="form-select" aria-label="Default select example" id="mascota">
+                      <option selected>Mascota</option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <select id="veterinario" class="form-select" aria-label="Default select example">
+                      <option selected>Veterinari@</option>
                     </select>
                   </div>
                 </div>
                 <div class="row g-3">
                   <div class="col">
-                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre">
-                  </div>
-                  <div class="col">
-                    <select id="dueno" class="form-select" aria-label="Default select example">
-                      <option selected>Dueño</option>
-                      <option>Juan</option>
-                      <option>Jose</option>
-                      <option>Camilo</option>
-                      <option>Sandra</option>
-                    </select>
+                    <input type="text" id="diagnostico" name="nombre" class="form-control" placeholder="Diagnóstico">
                   </div>
                 </div>
               </div>

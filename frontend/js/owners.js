@@ -44,7 +44,7 @@ async function showOwners() {
       );
     }else{
       listOwners.innerHTML = `<tr>
-        <td colspan="5">No tienes mascotas </td>
+        <td colspan="5">No tienes dueños </td>
       </tr>`
     }
   } catch (error) {

@@ -44,7 +44,7 @@ async function showVeterinarians() {
       );
     }else{
       listVeterinarians.innerHTML = `<tr>
-        <td colspan="5">No tienes mascotas </td>
+        <td colspan="5">No tienes veterinari@s </td>
       </tr>`
     }
   } catch (error) {

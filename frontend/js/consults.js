@@ -1,19 +1,21 @@
 const listConsults = document.getElementById("list-consults");
 const id = document.getElementById("id");
-const name = document.getElementById("nombre");
-const lastName = document.getElementById("apellido");
-const country = document.getElementById("pais");
+const pet = document.getElementById("mascota");
+const veterinarian = document.getElementById("veterinario");
+const diagnosis = document.getElementById("diagnostico");
 const inputId = document.getElementById("inputId");
 const form = document.getElementById("form");
 const btnSave = document.getElementById("btnSave");
 const alertNode = document.getElementById('alert')
-const URL = "http://localhost:5000/consults"
+const URL = "http://localhost:5000"
 
 let consults = [];
+let pets = [];
 
 async function showConsults() {
+  const entity = "consults"
   try {
-    const response = await fetch(URL)
+    const response = await fetch(`${URL}/${entity}`)
     const consultServer = await response.json()
     if (Array.isArray(consultServer)) {
       consults = consultServer
@@ -24,13 +26,13 @@ async function showConsults() {
           (consult, key) => `
         <tr>
           <th scope="row">${key}</th>
-          <td>${consult.mascota}</td>
-          <td>${consult.veterinarian}</td>
-          <td>${consult.log}</td>
+          <td>${consult.pet.name}</td>
+          <td>${consult.veterinarian.name} ${consult.veterinarian.lastname}</td>
           <td>${consult.diagnosis}</td>
+          <td>${consult.created_at}</td>
+          <td>${consult.updated_at}</td>
           <td>
             <button type="button" class="btn btn-success edit" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="far fa-edit"></i></button>
-            <button type="button" class="btn btn-danger delete"><i class="far fa-trash-alt"></i></button>
           </td>
         </tr>`
         )
@@ -53,8 +55,40 @@ async function showConsults() {
   }
 }
 
+async function showPets() {
+  const entity = "pets"
+  try {
+    const response = await fetch(`${URL}/${entity}`)
+    const petServer = await response.json()
+    if (Array.isArray(petServer)) {
+      pets = petServer
+    }
+    if (pets.length > 0) {
+      const htmlPets = pets
+        .map(
+          (pet, key) => `
+        <option value="${key}">${pet.name}</option>`
+        )
+        .join("");
+      pet.innerHTML += htmlPets;
+      Array.from(document.getElementsByClassName("edit")).forEach(
+        (btnEdit, key) => (btnEdit.onclick = edit(key))
+      );
+      Array.from(document.getElementsByClassName("delete")).forEach(
+        (btnDelete, key) => (btnDelete.onclick = deleteConsult(key))
+      );
+    }else{
+      pet.innerHTML += `<option>sin mascotas</option>`
+    }
+  } catch (error) {
+    alertNode.classList.toggle("hide");
+    alertNode.classList.toggle("show");
+  }
+}
+
 async function sendData(e) {
   e.preventDefault();
+  const entity = "consults"
   try {
     const data = {
       identification: id.value,
@@ -63,12 +97,12 @@ async function sendData(e) {
       country: country.value,
     };
     let method = "POST"
-    let urlSend = URL
+    let urlSend = `${URL}/${entity}`
     const action = btnSave.innerHTML
     if (action === "Editar") {
       method = "PUT"
       consults[inputId.value] = data
-      urlSend = `${URL}/${inputId.value}`
+      urlSend = `${URL}/${entity}/${inputId.value}`
     }
     const response = await fetch(urlSend, {
       method,
@@ -109,7 +143,8 @@ function resetData() {
 }
 
 function deleteConsult(key) {
-  const urlSend = `${URL}/${key}`
+  const entity = "consults"
+  const urlSend = `${URL}/${entity}/${key}`
   return async function clickDelete() {
     try {
       const response = await fetch(urlSend, {
@@ -127,6 +162,7 @@ function deleteConsult(key) {
 }
 
 showConsults();
+showPets()
 
 form.onsubmit = sendData;
 btnSave.onclick = sendData;
