@@ -41,18 +41,25 @@
     </nav>
     <div class="container mt-5">
       <h1 class="m-2 text-center">Dueños</h1>
+      <div class="">
+        <div id="alert" class="alert alert-danger alert-dismissible fade hide" role="alert">
+          <strong>Ups!</strong> Ha ocurrido un error
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <button type="button" class="btn btn-primary m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fas fa-plus"></i> Nuev@ Dueñ@</button>
+      </div>
       <table class="table caption-top">
-        <button type="button" class="btn btn-primary m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fas fa-plus"></i> Nueva mascota</button>
         <thead class="table-dark">
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Tipo</th>
+            <th scope="col">Identificación</th>
             <th scope="col">Nombre</th>
-            <th scope="col">Dueño</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">País</th>
             <th scope="col"></th>
           </tr>
         </thead>
-        <tbody id="list-pets">
+        <tbody id="list-owners">
         </tbody>
       </table>
 
@@ -61,7 +68,7 @@
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="staticBackdropLabel">Nueva Mascota</h5>
+              <h5 class="modal-title" id="staticBackdropLabel">Nuev@ Dueñ@</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="form">
@@ -69,26 +76,24 @@
               <div class="modal-body">
                 <div class="row g-3 mb-3">
                   <div class="col">
-                    <select class="form-select" aria-label="Default select example" id="tipo">
-                      <option selected>Tipo de animal</option>
-                      <option>Perro</option>
-                      <option>Gato</option>
-                      <option>Pez</option>
-                      <option>Otro</option>
-                    </select>
+                    <input type="text" id="id" name="id" class="form-control" placeholder="Identificación">
                   </div>
-                </div>
-                <div class="row g-3">
                   <div class="col">
                     <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre">
                   </div>
                   <div class="col">
-                    <select id="dueno" class="form-select" aria-label="Default select example">
-                      <option selected>Dueño</option>
-                      <option>Juan</option>
-                      <option>Jose</option>
-                      <option>Camilo</option>
-                      <option>Sandra</option>
+                    <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Apellido">
+                  </div>
+                </div>
+                <div class="row g-3">
+                  <div class="col">
+                    <select id="pais" class="form-select" aria-label="Default select example">
+                      <option selected>País</option>
+                      <option>Colombia</option>
+                      <option>Chile</option>
+                      <option>Argentina</option>
+                      <option>Paraguay</option>
+                      <option>Perú</option>
                     </select>
                   </div>
                 </div>
@@ -105,6 +110,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/9e33d3bfc7.js" crossorigin="anonymous"></script>
-    <script src="./js/pets.js"></script>
+    <script src="./js/owners.js"></script>
   </body>
 </html>
