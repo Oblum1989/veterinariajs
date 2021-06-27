@@ -7,7 +7,7 @@ const inputId = document.getElementById("inputId");
 const form = document.getElementById("form");
 const btnSave = document.getElementById("btnSave");
 const alertNode = document.getElementById('alert')
-const URL = "http://localhost:5000/veterinarians"
+const URL = "https://veterinaria-pearl.vercel.app/index.html/veterinarians"
 
 let veterinarians = [];
 

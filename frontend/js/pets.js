@@ -5,17 +5,17 @@ const owner = document.getElementById("dueno");
 const inputId = document.getElementById("inputId");
 const form = document.getElementById("form");
 const btnSave = document.getElementById("btnSave");
-const alertNode = document.getElementById('alert')
-const URL = "http://localhost:5000/pets"
+const alertNode = document.getElementById("alert");
+const URL = "https://veterinaria-pearl.vercel.app/index.html/pets";
 
 let pets = [];
 
 async function showPets() {
   try {
-    const response = await fetch(URL)
-    const petsServer = await response.json()
-    if(Array.isArray(petsServer)){
-      pets = petsServer
+    const response = await fetch(URL);
+    const petsServer = await response.json();
+    if (Array.isArray(petsServer)) {
+      pets = petsServer;
     }
     if (pets.length > 0) {
       const htmlPets = pets
@@ -40,10 +40,10 @@ async function showPets() {
       Array.from(document.getElementsByClassName("delete")).forEach(
         (btnDelete, key) => (btnDelete.onclick = deletePet(key))
       );
-    }else{
+    } else {
       listPets.innerHTML = `<tr>
         <td colspan="5">No tienes mascotas </td>
-      </tr>`
+      </tr>`;
     }
   } catch (error) {
     alertNode.classList.toggle("hide");
@@ -59,13 +59,13 @@ async function sendData(e) {
       name: name.value,
       owner: owner.value,
     };
-    let method = "POST"
-    let urlSend = URL
+    let method = "POST";
+    let urlSend = URL;
     const action = btnSave.innerHTML;
-    if(action === "Editar"){
-      method = "PUT"
+    if (action === "Editar") {
+      method = "PUT";
       pets[inputId.value] = data;
-      urlSend = `${URL}/${inputId.value}`
+      urlSend = `${URL}/${inputId.value}`;
     }
     const response = await fetch(urlSend, {
       method,
@@ -73,7 +73,7 @@ async function sendData(e) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-    })
+    });
     if (response.ok) {
       showPets();
       resetData();
@@ -82,7 +82,6 @@ async function sendData(e) {
     alertNode.classList.toggle("hide");
     alertNode.classList.toggle("show");
   }
-
 }
 
 function edit(key) {
@@ -105,12 +104,12 @@ function resetData() {
 }
 
 function deletePet(key) {
-  const urlSend = `${URL}/${key}`
+  const urlSend = `${URL}/${key}`;
   return async function clickDelete() {
     try {
       const response = await fetch(urlSend, {
         method: "DELETE",
-      })
+      });
       if (response.ok) {
         showPets();
         resetData();

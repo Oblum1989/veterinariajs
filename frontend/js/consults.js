@@ -7,19 +7,19 @@ const history = document.getElementById("historia");
 const inputId = document.getElementById("inputId");
 const form = document.getElementById("form");
 const btnSave = document.getElementById("btnSave");
-const alertNode = document.getElementById('alert')
-const URL = "http://localhost:5000"
+const alertNode = document.getElementById("alert");
+const URL = "https://veterinaria-pearl.vercel.app/index.html";
 
 let consults = [];
 let pets = [];
 
 async function showConsults() {
-  const entity = "consults"
+  const entity = "consults";
   try {
-    const response = await fetch(`${URL}/${entity}`)
-    const consultServer = await response.json()
+    const response = await fetch(`${URL}/${entity}`);
+    const consultServer = await response.json();
     if (Array.isArray(consultServer)) {
-      consults = consultServer
+      consults = consultServer;
     }
     if (consults.length > 0) {
       const htmlConsults = consults
@@ -42,10 +42,10 @@ async function showConsults() {
       Array.from(document.getElementsByClassName("edit")).forEach(
         (btnEdit, key) => (btnEdit.onclick = edit(key))
       );
-    }else{
+    } else {
       listConsults.innerHTML = `<tr>
         <td colspan="5">No tienes mascotas </td>
-      </tr>`
+      </tr>`;
     }
   } catch (error) {
     alertNode.classList.toggle("hide");
@@ -54,12 +54,12 @@ async function showConsults() {
 }
 
 async function showPets() {
-  const entity = "pets"
+  const entity = "pets";
   try {
-    const response = await fetch(`${URL}/${entity}`)
-    const petServer = await response.json()
+    const response = await fetch(`${URL}/${entity}`);
+    const petServer = await response.json();
     if (Array.isArray(petServer)) {
-      pets = petServer
+      pets = petServer;
     }
     if (pets.length > 0) {
       const htmlPets = pets
@@ -69,8 +69,8 @@ async function showPets() {
         )
         .join("");
       pet.innerHTML += htmlPets;
-    }else{
-      pet.innerHTML += `<option>sin mascotas</option>`
+    } else {
+      pet.innerHTML += `<option>sin mascotas</option>`;
     }
   } catch (error) {
     alertNode.classList.toggle("hide");
@@ -79,12 +79,12 @@ async function showPets() {
 }
 
 async function showVeterinarian() {
-  const entity = "veterinarians"
+  const entity = "veterinarians";
   try {
-    const response = await fetch(`${URL}/${entity}`)
-    const veterinarianServer = await response.json()
+    const response = await fetch(`${URL}/${entity}`);
+    const veterinarianServer = await response.json();
     if (Array.isArray(veterinarianServer)) {
-      veterinarians = veterinarianServer
+      veterinarians = veterinarianServer;
     }
     if (veterinarians.length > 0) {
       const htmlVeterinarians = veterinarians
@@ -93,9 +93,9 @@ async function showVeterinarian() {
         <option value="${key}">${veterinarian.name}</option>`
         )
         .join("");
-        veterinarian.innerHTML += htmlVeterinarians;
-    }else{
-      veterinarian.innerHTML += `<option>sin mascotas</option>`
+      veterinarian.innerHTML += htmlVeterinarians;
+    } else {
+      veterinarian.innerHTML += `<option>sin mascotas</option>`;
     }
   } catch (error) {
     alertNode.classList.toggle("hide");
@@ -105,7 +105,7 @@ async function showVeterinarian() {
 
 async function sendData(e) {
   e.preventDefault();
-  const entity = "consults"
+  const entity = "consults";
   try {
     const data = {
       mascota: pet.value,
@@ -113,29 +113,29 @@ async function sendData(e) {
       log: history.value,
       diagnosis: diagnosis.value,
     };
-    if (validate(data) === true){
-      let method = "POST"
-      let urlSend = `${URL}/${entity}`
-      const action = btnSave.innerHTML
+    if (validate(data) === true) {
+      let method = "POST";
+      let urlSend = `${URL}/${entity}`;
+      const action = btnSave.innerHTML;
       if (action === "Editar") {
-        method = "PUT"
-        consults[inputId.value] = data
-        urlSend = `${URL}/${entity}/${inputId.value}`
+        method = "PUT";
+        consults[inputId.value] = data;
+        urlSend = `${URL}/${entity}/${inputId.value}`;
       }
       const response = await fetch(urlSend, {
         method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
-      })
+        body: JSON.stringify(data),
+      });
       if (response.ok) {
-        showConsults()
-        resetData()
+        showConsults();
+        resetData();
       }
-      return
+      return;
     }
-    alert('Formulario incompleto')
+    alert("Formulario incompleto");
   } catch (error) {
     alertNode.classList.toggle("hide");
     alertNode.classList.toggle("show");
@@ -147,12 +147,12 @@ function edit(key) {
     btnSave.innerText = "Editar";
     const consulta = consults[key];
     inputId.value = key;
-    pet.value = consulta.pet.id
-    veterinarian.value = consulta.veterinarian.id
-    history.value = consulta.log
-    diagnosis.value = consulta.diagnosis
-  }
-};
+    pet.value = consulta.pet.id;
+    veterinarian.value = consulta.veterinarian.id;
+    history.value = consulta.log;
+    diagnosis.value = consulta.diagnosis;
+  };
+}
 
 function resetData() {
   pet.value = "";
@@ -164,23 +164,23 @@ function resetData() {
 }
 
 function validate(data) {
-  if (typeof data !== 'object') return false
+  if (typeof data !== "object") return false;
   for (const key in data) {
-    if (data[key].length === 0) return false
+    if (data[key].length === 0) return false;
   }
-  return true
+  return true;
 }
 
 function deleteConsult(key) {
-  const entity = "consults"
-  const urlSend = `${URL}/${entity}/${key}`
+  const entity = "consults";
+  const urlSend = `${URL}/${entity}/${key}`;
   return async function clickDelete() {
     try {
       const response = await fetch(urlSend, {
         method: "DELETE",
-      })
+      });
       if (response.ok) {
-        showConsults()
+        showConsults();
         resetData();
       }
     } catch (error) {
@@ -191,8 +191,8 @@ function deleteConsult(key) {
 }
 
 showConsults();
-showPets()
-showVeterinarian()
+showPets();
+showVeterinarian();
 
 form.onsubmit = sendData;
 btnSave.onclick = sendData;
