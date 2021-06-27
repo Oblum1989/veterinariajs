@@ -3,6 +3,7 @@ const id = document.getElementById("id");
 const pet = document.getElementById("mascota");
 const veterinarian = document.getElementById("veterinario");
 const diagnosis = document.getElementById("diagnostico");
+const history = document.getElementById("historia");
 const inputId = document.getElementById("inputId");
 const form = document.getElementById("form");
 const btnSave = document.getElementById("btnSave");
@@ -41,9 +42,6 @@ async function showConsults() {
       Array.from(document.getElementsByClassName("edit")).forEach(
         (btnEdit, key) => (btnEdit.onclick = edit(key))
       );
-      Array.from(document.getElementsByClassName("delete")).forEach(
-        (btnDelete, key) => (btnDelete.onclick = deleteConsult(key))
-      );
     }else{
       listConsults.innerHTML = `<tr>
         <td colspan="5">No tienes mascotas </td>
@@ -71,14 +69,33 @@ async function showPets() {
         )
         .join("");
       pet.innerHTML += htmlPets;
-      Array.from(document.getElementsByClassName("edit")).forEach(
-        (btnEdit, key) => (btnEdit.onclick = edit(key))
-      );
-      Array.from(document.getElementsByClassName("delete")).forEach(
-        (btnDelete, key) => (btnDelete.onclick = deleteConsult(key))
-      );
     }else{
       pet.innerHTML += `<option>sin mascotas</option>`
+    }
+  } catch (error) {
+    alertNode.classList.toggle("hide");
+    alertNode.classList.toggle("show");
+  }
+}
+
+async function showVeterinarian() {
+  const entity = "veterinarians"
+  try {
+    const response = await fetch(`${URL}/${entity}`)
+    const veterinarianServer = await response.json()
+    if (Array.isArray(veterinarianServer)) {
+      veterinarians = veterinarianServer
+    }
+    if (veterinarians.length > 0) {
+      const htmlVeterinarians = veterinarians
+        .map(
+          (veterinarian, key) => `
+        <option value="${key}">${veterinarian.name}</option>`
+        )
+        .join("");
+        veterinarian.innerHTML += htmlVeterinarians;
+    }else{
+      veterinarian.innerHTML += `<option>sin mascotas</option>`
     }
   } catch (error) {
     alertNode.classList.toggle("hide");
@@ -91,30 +108,34 @@ async function sendData(e) {
   const entity = "consults"
   try {
     const data = {
-      identification: id.value,
-      name: name.value,
-      lastname: lastName.value,
-      country: country.value,
+      mascota: pet.value,
+      veterinarian: veterinarian.value,
+      log: history.value,
+      diagnosis: diagnosis.value,
     };
-    let method = "POST"
-    let urlSend = `${URL}/${entity}`
-    const action = btnSave.innerHTML
-    if (action === "Editar") {
-      method = "PUT"
-      consults[inputId.value] = data
-      urlSend = `${URL}/${entity}/${inputId.value}`
+    if (validate(data) === true){
+      let method = "POST"
+      let urlSend = `${URL}/${entity}`
+      const action = btnSave.innerHTML
+      if (action === "Editar") {
+        method = "PUT"
+        consults[inputId.value] = data
+        urlSend = `${URL}/${entity}/${inputId.value}`
+      }
+      const response = await fetch(urlSend, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data)
+      })
+      if (response.ok) {
+        showConsults()
+        resetData()
+      }
+      return
     }
-    const response = await fetch(urlSend, {
-      method,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data)
-    })
-    if (response.ok) {
-      showConsults()
-      resetData()
-    }
+    alert('Formulario incompleto')
   } catch (error) {
     alertNode.classList.toggle("hide");
     alertNode.classList.toggle("show");
@@ -124,22 +145,30 @@ async function sendData(e) {
 function edit(key) {
   return function handler() {
     btnSave.innerText = "Editar";
-    consulta = consults[key];
-    name.value = consulta.name;
-    lastName.value = consulta.lastname;
-    id.value = consulta.identification;
-    country.value = consulta.country
+    const consulta = consults[key];
     inputId.value = key;
-  };
-}
+    pet.value = consulta.pet.id
+    veterinarian.value = consulta.veterinarian.id
+    history.value = consulta.log
+    diagnosis.value = consulta.diagnosis
+  }
+};
 
 function resetData() {
-  name.value = "";
-  lastName.value = "";
-  country.value = "";
-  id.value = "";
+  pet.value = "";
+  veterinarian.value = "";
+  history.value = "";
+  diagnosis.value = "";
   inputId.value = "";
   btnSave.innerHTML = "Crear";
+}
+
+function validate(data) {
+  if (typeof data !== 'object') return false
+  for (const key in data) {
+    if (data[key].length === 0) return false
+  }
+  return true
 }
 
 function deleteConsult(key) {
@@ -163,6 +192,7 @@ function deleteConsult(key) {
 
 showConsults();
 showPets()
+showVeterinarian()
 
 form.onsubmit = sendData;
 btnSave.onclick = sendData;

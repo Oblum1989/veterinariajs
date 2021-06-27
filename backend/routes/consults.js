@@ -1,4 +1,4 @@
-module.exports = function consultsHandler({consults, veterinarians, pets}) {
+module.exports = function consultsHandler({ consults, veterinarians, pets }) {
   return {
     get: (data, callback) => {
       if (typeof data.indice !== "undefined") {
@@ -9,9 +9,11 @@ module.exports = function consultsHandler({consults, veterinarians, pets}) {
           message: `elemento con indice ${data.indice} no encontrado`,
         });
       }
-      const consultsRelations = consults.map((consult)=>(
-        {...consult, pet: pets[consult.mascota], veterinarian: veterinarians[consult.veterinarian]}
-      ))
+      const consultsRelations = consults.map((consult) => ({
+        ...consult,
+        pet: {...pets[consult.mascota], id: consult.mascota},
+        veterinarian: {...veterinarians[consult.veterinarian], id: consult.veterinarian},
+      }));
       callback(200, consultsRelations);
     },
     post: (data, callback) => {
@@ -24,11 +26,11 @@ module.exports = function consultsHandler({consults, veterinarians, pets}) {
     put: (data, callback) => {
       if (typeof data.indice !== "undefined") {
         if (consults[data.indice]) {
-          const {created_at} = consults[data.indice]
+          const { created_at } = consults[data.indice];
           consults[data.indice] = {
             ...data.payload,
             created_at,
-            updated_at: new Date()
+            updated_at: new Date(),
           };
           return callback(200, consults[data.indice]);
         }
